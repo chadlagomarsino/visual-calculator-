@@ -1,0 +1,17 @@
+.calculator {
+  display: grid;
+  grid-template-rows: 100px 200px;
+  border: solid black;
+  width: 150px;
+}
+
+.display {
+  width: 140px;
+  display: grid;
+  background-color: rgb(240, 244, 224);
+  border: solid 5px grey;
+}
+.keypad {
+  display: grid;
+  grid-template-columns: 50px 50px 50px;
+}
