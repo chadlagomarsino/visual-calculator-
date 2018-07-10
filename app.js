@@ -22,6 +22,8 @@
   const btn_exponent = document.getElementById("btn-exponent");
   const btn_root = document.getElementById("btn-root");
   const btn_decimal = document.getElementById("btn-decimal")
+  const btn_leftP = document.getElementById("btn-leftP")
+  const btn_rightP = document.getElementById("btn-rightP")
 
   /*
   * Methods
@@ -36,6 +38,9 @@
     exponent: "^",
     root: "root",
     decimal: ".",
+    leftP: "(",
+    rightP: ")",
+
   }
 
   function createEquation() {
@@ -83,11 +88,21 @@
           if (self.symbols[i+j] != null && self.symbols[i+j] != undefined) {
             let b = self.symbols[i+j];
             self.symbols[i+j] = null;
-            return b;
+            return b;s
           }
         }
       },
       operate() {
+        //run through array looking for "(" AND ")"
+        //for(let i = 0; i < self.symbols.length; i++) {
+          //if(self.symbols[i] == "(") {
+            //for(let i = 0; i < self.symbols.length; i++) {
+              //if((self.symbols[i] == ")")) {
+
+              //}
+            //}
+
+          //}
         //run through array looking for all ^ and root
         for(let i = 0; i < self.symbols.length; i++) {
           if(self.symbols[i] == "^" || self.symbols[i] == "root" ) {
@@ -136,12 +151,16 @@
             //console.log(equations);
           }
         }
-        //fetch solution
+        //fetch solution and reset array
         for(let i = 0; i <self.symbols.length; i++) {
           if(self.symbols[i] != null) {
-            let solution = self.symbols[i];
-            console.log(solution);
-            return solution;
+            let answer = self.symbols[i];
+            console.log(answer);
+            //clear array
+            self.symbols.length = 0;
+            //insert answer, to allow further operations
+            self.symbols.push(answer);
+
           }
         }
       }
@@ -152,8 +171,9 @@
   function generateEquation(e) {
     const newEquation = createEquation();
     equations.push(newEquation);
-    //hacky method of refresing the equal event listener. Fix.
-    btn_equal.removeEventListener('click', equations[equations.length-1].operate);
+    //Remove eventlistener for previous equation
+    btn_equal.removeEventListener('click', equations[equations.length-2].operate);
+    //Replace eventlistener for current equation
     btn_equal.addEventListener('click', equations[equations.length-1].operate);
   }
 
@@ -176,17 +196,27 @@
       equations[equations.length-1].symbols.pop();
       //replace with multiNum
       equations[equations.length-1].symbols.push(multiNum);
-      console.log(equations);
+      //console.log(equations);
     }
     //this is only a single digit number
     else {
     equations[equations.length-1].symbols.push(i);
-    console.log(equations);
+    //console.log(equations);
     }
   }
 
   function pushDecimal(sym) {
     equations[equations.length-1].symbols.push(sym.decimal);
+    //console.log(equations);
+  }
+
+  function pushLeftP(sym) {
+    equations[equations.length-1].symbols.push(sym.leftP);
+    console.log(equations);
+  }
+
+  function pushRightP(sym) {
+    equations[equations.length-1].symbols.push(sym.rightP);
     console.log(equations);
   }
 
@@ -238,7 +268,6 @@
   */
 
   equations[0] = createEquation();
-  let solution = 0;
 
   //New Equation on Object on Clear. Update
   btn_clear.addEventListener('click', generateEquation);
@@ -259,7 +288,11 @@
   btn_exponent.addEventListener('click', pushExponent.bind(null, sym));
   btn_root.addEventListener('click', pushRoot.bind(null, sym));
 
+  btn_leftP.addEventListener('click', pushLeftP.bind(null, sym));
+  btn_rightP.addEventListener('click', pushRightP.bind(null, sym));
   //Operate equation of equal button press
-  solution = btn_equal.addEventListener('click', equations[equations.length-1].operate);
+  btn_equal.addEventListener('click', equations[equations.length-1].operate);
+
+  //Retrive answer on ANS button press
 
 }(document));

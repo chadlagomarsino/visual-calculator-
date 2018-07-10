@@ -1,7 +1,7 @@
 .calculator {
   display: grid;
   grid-template-rows: 100px 200px;
-  border: solid black;
+  border: solid dimgrey;
   width: 150px;
 }
 
@@ -10,6 +10,10 @@
   display: grid;
   background-color: rgb(240, 244, 224);
   border: solid 5px grey;
+}
+
+.display div {
+  text-align: right;
 }
 .keypad {
   display: grid;
