@@ -10,289 +10,136 @@
   /*
   * Variables / Selectors
   */
-  const equations = []; //array of equation objects
 
-  const numBtns = document.getElementsByClassName("btn-num");
-  const btn_clear = document.getElementById("btn-clear");
-  const btn_plus = document.getElementById("btn-plus");
-  const btn_minus = document.getElementById("btn-minus");
-  const btn_multiply = document.getElementById("btn-multiply");
-  const btn_divide = document.getElementById("btn-divide");
-  const btn_equal = document.getElementById("btn-equal");
-  const btn_exponent = document.getElementById("btn-exponent");
-  const btn_root = document.getElementById("btn-root");
-  const btn_decimal = document.getElementById("btn-decimal")
-  const btn_leftP = document.getElementById("btn-leftP")
-  const btn_rightP = document.getElementById("btn-rightP")
+  const π = 3.1415;
+  const e = 2.7182;
+
+  //select DOM elements
+  const display = document.getElementById("display");
+  const buttons = document.querySelectorAll("button.btn");
+  // const regex_exp = /[\d]/;
 
   /*
   * Methods
   */
 
-  //symbols for math operations
-  const sym = {
-    plus: "+",
-    minus: "-",
-    multiply: "*",
-    divide: "/",
-    exponent: "^",
-    root: "root",
-    decimal: ".",
-    leftP: "(",
-    rightP: ")",
+  function operate() {
+    //if there is an a power sign
+    //if(display.value.indexOf("^") != -1) {
+      //while(display.value.indexOf("^"))
 
-  }
-
-  function createEquation() {
-    const self = {
-      symbols: [],
-      add(a, b) {
-        let x = a + b;
-        return x;
-      },
-      subtract(a, b) {
-        let x = a - b;
-        return x;
-      },
-      multiply(a, b) {
-        let x = Math.round((a * b) * 100) / 100;
-        return x;
-      },
-      divide(a, b) {
-        let x = Math.round((a / b) * 100) / 100;
-        return x;
-      },
-      exponent(a, b) {
-        for (let i = 1; i < b; i++) {
-          a = a * a;
-        }
-        return a
-      },
-      root(a, b) {
-        for (let i = 1; i < b; i++) {
-          a = a / b;
-        }
-        return a
-      },
-      symbolScanLeft(i) {
-        for (let j = 1; j <= i; j++) {
-          if (self.symbols[i-j] != null && self.symbols[i-j] != undefined) {
-            let a = self.symbols[i-j];
-            self.symbols[i-j] = null;
-            return a;
-          }
-        }
-      },
-      symbolScanRight(i) {
-        for (let j = 1; j <= (self.symbols.length - i); j++) {
-          if (self.symbols[i+j] != null && self.symbols[i+j] != undefined) {
-            let b = self.symbols[i+j];
-            self.symbols[i+j] = null;
-            return b;s
-          }
-        }
-      },
-      operate() {
-        //run through array looking for "(" AND ")"
-        //for(let i = 0; i < self.symbols.length; i++) {
-          //if(self.symbols[i] == "(") {
-            //for(let i = 0; i < self.symbols.length; i++) {
-              //if((self.symbols[i] == ")")) {
-
-              //}
-            //}
-
-          //}
-        //run through array looking for all ^ and root
-        for(let i = 0; i < self.symbols.length; i++) {
-          if(self.symbols[i] == "^" || self.symbols[i] == "root" ) {
-            let a = self.symbolScanLeft(i);
-            let b = self.symbolScanRight(i);
-            if(self.symbols[i] == "^") {
-              let x = self.exponent(a, b);
-              self.symbols[i] = x;
-            }
-            if(self.symbols[i] == "root") {
-              let x = self.root(a, b);
-              self.symbols[i] = x;
-            }
-            //console.log(equations);
-          }
-        }
-        //run through array looking for all * or /
-        for(let i = 0; i < self.symbols.length; i++) {
-          if(self.symbols[i] == "*" || self.symbols[i] == "/" ) {
-            let a = self.symbolScanLeft(i);
-            let b = self.symbolScanRight(i);
-            if(self.symbols[i] == "*") {
-              let x = self.multiply(a, b);
-              self.symbols[i] = x;
-            }
-            if(self.symbols[i] == "/") {
-              let x = self.divide(a, b);
-              self.symbols[i] = x;
-            }
-            //console.log(equations);
-          }
-        }
-        //run through array looking for all + or -
-        for(let i = 0; i < self.symbols.length; i++) {
-          if(self.symbols[i] == "+" || self.symbols[i] == "-" ) {
-            let a = self.symbolScanLeft(i);
-            let b = self.symbolScanRight(i);
-            if(self.symbols[i] == "+") {
-              let x = self.add(a, b);
-              self.symbols[i] = x;
-            }
-            if(self.symbols[i] == "-") {
-              let x = self.subtract(a, b);
-              self.symbols[i] = x;
-            }
-            //console.log(equations);
-          }
-        }
-        //fetch solution and reset array
-        for(let i = 0; i <self.symbols.length; i++) {
-          if(self.symbols[i] != null) {
-            let answer = self.symbols[i];
-            console.log(answer);
-            //clear array
-            self.symbols.length = 0;
-            //insert answer, to allow further operations
-            self.symbols.push(answer);
-
-          }
-        }
-      }
+      //check if value behind the ^ is a digit or pi, e, or i
+      //while //display loop
+      //let base = display.value.slice(display.value.indexOf("^"), display.value.indexOf("^") - 1);
+      //console.log(base);
+    //display.value = eval("Math.pow(" + base + "," + exponent + ")");
+    //enable i
+    try {
+    //look for divide by 0 error
+    if (display.value.includes("/0")) {
+      throw new SyntaxError("CANNOT DIVIDE BY ZERO");
     }
-    return self;
-  }
-
-  function generateEquation(e) {
-    const newEquation = createEquation();
-    equations.push(newEquation);
-    //Remove eventlistener for previous equation
-    btn_equal.removeEventListener('click', equations[equations.length-2].operate);
-    //Replace eventlistener for current equation
-    btn_equal.addEventListener('click', equations[equations.length-1].operate);
-  }
-
-  //check if previous array entry is a number
-  function numChecker() {
-    if((typeof equations[equations.length-1].symbols.slice(-1)[0]) === (typeof 1)) {
-       return true;
-     }
-  }
-
-  //on button press push to array
-  function pushNum(i) {
-    //test if next array entry is a multidigit number
-    if (numChecker()) {
-      //concatinate multidigit number
-      let multiNum = `${equations[equations.length-1].symbols.slice(-1)[0]}${i}`;
-      //convert from string to number
-      multiNum = parseInt(multiNum);
-      //remove last array entry
-      equations[equations.length-1].symbols.pop();
-      //replace with multiNum
-      equations[equations.length-1].symbols.push(multiNum);
-      //console.log(equations);
+    display.value = eval(display.value);
     }
-    //this is only a single digit number
-    else {
-    equations[equations.length-1].symbols.push(i);
-    //console.log(equations);
+    catch(err) {
+      console.log(err);
+      display.value = "Syntax Error";
+
     }
   }
 
-  function pushDecimal(sym) {
-    equations[equations.length-1].symbols.push(sym.decimal);
-    //console.log(equations);
+  function clear() {
+    display.value = "";
   }
 
-  function pushLeftP(sym) {
-    equations[equations.length-1].symbols.push(sym.leftP);
-    console.log(equations);
+  function backspace() {
+    let display_array = display.value.split("").slice(0, -1);
+    display.value = display_array.join("")
   }
 
-  function pushRightP(sym) {
-    equations[equations.length-1].symbols.push(sym.rightP);
-    console.log(equations);
+  function sin() {
+  display.value = Math.round((Math.cos(display.value) * 100)) / 100;
   }
 
-  function pushPlus(sym) {
-    //prevent user from inputting more than one symbol in a row
-    if (numChecker()) {
-      equations[equations.length-1].symbols.push(sym.plus);
-    }
-    //console.log(equations);
+  function cos() {
+  display.value = Math.round((Math.cos(display.value) * 100)) / 100;
   }
 
-  function pushMinus(sym) {
-    if (numChecker()) {
-      equations[equations.length-1].symbols.push(sym.minus);
-    }
-    //console.log(equations);
+  function tan() {
+  display.value = Math.round((Math.cos(display.value) * 100)) / 100;
   }
 
-  function pushMultiply(sym) {
-    if (numChecker()) {
-      equations[equations.length-1].symbols.push(sym.multiply);
-    }
-    //console.log(equations);
+  function log() {
+  display.value = Math.round((Math.log(display.value) * 100)) / 100;
   }
 
-  function pushDivide(sym) {
-    if (numChecker()) {
-      equations[equations.length-1].symbols.push(sym.divide);
-    }
-    //console.log(equations);
+  function ln() {
+  display.value = Math.round((Math.ln(display.value) * 100)) / 100;
   }
 
-  function pushExponent(sym) {
-    if (numChecker()) {
-      equations[equations.length-1].symbols.push(sym.exponent);
-    }
-    //console.log(equations);
+  function exponent() {
+  display.value += "^";
   }
 
-  function pushRoot(sym) {
-    if (numChecker()) {
-      equations[equations.length-1].symbols.push(sym.root);
-    }
-    //console.log(equations);
+  function squareRoot() {
+  display.value = Math.round((Math.sqrt(display.value) * 100)) / 100;
   }
 
   /*
   * Events / APIs / Initialize
   */
 
-  equations[0] = createEquation();
+  //add eventlisteners to all buttons in nodeList
+  buttons.forEach(function(button) {
+    button.addEventListener("click", function() {
+      if (button.textContent != "=" &&
+      button.textContent != "CE" &&
+      button.textContent != "BACK" &&
+      button.textContent != "√" &&
+      button.textContent != "±"  &&
+      button.textContent != "sin" &&
+      button.textContent != "cos" &&
+      button.textContent != "tan" &&
+      button.textContent != "log" &&
+      button.textContent != "ln" &&
+      button.textContent != "x^" &&
+      button.textContent != "RAD" &&
+      button.textContent != "DEG") {
+        display.value += button.textContent;
+      }
+      else if (button.textContent == "CE") {
+        clear();
+      }
+      else if (button.textContent == "BACK") {
+        backspace();
+      }
+      else if (button.textContent == "="){
+        operate();
+      }
+      else if (button.textContent == "sin"){
+        sin();
+      }
+      else if (button.textContent == "cos"){
+        cos();
+      }
+      else if (button.textContent == "tan"){
+        tan();
+      }
+      else if (button.textContent == "log"){
+        log();
+      }
+      else if (button.textContent == "ln"){
+        ln();
+      }
+      else if (button.textContent == "x^"){
+        exponent();
+      }
+      else if (button.textContent == "√"){
+        squareRoot();
+      }
+    })
+  });
 
-  //New Equation on Object on Clear. Update
-  btn_clear.addEventListener('click', generateEquation);
 
-  //Push number on num button press
-  for (let i = 0; i < 10; i++) {
-    numBtns[i].addEventListener('click', pushNum.bind(null, i));
-  }
-
-  //Push decimal on symbol button press
-  btn_decimal.addEventListener('click', pushDecimal.bind(null, sym));
-
-  //Push math symbol on symbol button press
-  btn_plus.addEventListener('click', pushPlus.bind(null, sym));
-  btn_minus.addEventListener('click', pushMinus.bind(null, sym));
-  btn_multiply.addEventListener('click', pushMultiply.bind(null, sym));
-  btn_divide.addEventListener('click', pushDivide.bind(null, sym));
-  btn_exponent.addEventListener('click', pushExponent.bind(null, sym));
-  btn_root.addEventListener('click', pushRoot.bind(null, sym));
-
-  btn_leftP.addEventListener('click', pushLeftP.bind(null, sym));
-  btn_rightP.addEventListener('click', pushRightP.bind(null, sym));
-  //Operate equation of equal button press
-  btn_equal.addEventListener('click', equations[equations.length-1].operate);
-
-  //Retrive answer on ANS button press
 
 }(document));
