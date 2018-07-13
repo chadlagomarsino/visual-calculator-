@@ -23,17 +23,20 @@
   * Methods
   */
 
-  function operate() {
+  function operate() {    
     //if there is an a power sign
-    //if(display.value.indexOf("^") != -1) {
-      //while(display.value.indexOf("^"))
-
+    if(display.value.includes("^")) {
+      let base = display.value.slice((display.value.indexOf("^") - 1),
+      display.value.indexOf("^"));
+      let exponent = display.value.slice((display.value.indexOf("^") + 1),
+      (display.value.indexOf("^") + 2));
+      let exp_value = eval("Math.pow(" + base + "," + exponent + ")");
+      //console.log(display.value);
+      display.value = display.value.replace(base + "^" + exponent, exp_value);
+      //console.log(display.value);
+    }
       //check if value behind the ^ is a digit or pi, e, or i
-      //while //display loop
-      //let base = display.value.slice(display.value.indexOf("^"), display.value.indexOf("^") - 1);
-      //console.log(base);
-    //display.value = eval("Math.pow(" + base + "," + exponent + ")");
-    //enable i
+      //enable i
     try {
     //look for divide by 0 error
     if (display.value.includes("/0")) {
